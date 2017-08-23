@@ -89,6 +89,9 @@ alias kc=kubectl
 export GOPATH=/root/go
 export PATH=$PATH:/usr/local/bin
 EOF
+	# path
+	path=/root/go/src/kubernetes-incubator 
+	mkdir -p $path
 
 	# Gluster-Kubernetes
 	echo "-- Installing gluster-kubernetes"
@@ -121,10 +124,6 @@ EOF
 	echo "-- Installing git"
 	yum install git -y -q -e 0
 
-	# minio s3 client
-	echo "-- Installing minio"
-	go get -u github.com/minio/minio-go
-
 	# heketi-client
 	echo "-- Installing heketi-client"
 	curl -sSL https://github.com/heketi/heketi/releases/download/v4.0.0/heketi-client-v4.0.0.linux.amd64.tar.gz | tar -xz
@@ -132,10 +131,10 @@ EOF
 
 	# jon's service-catalog repo
 	echo "-- Installing Jon's service-catalog repo"
-	mkdir -p /root/copejon && cd /root/copejon
+	pushd $path
 	git clone https://github.com/copejon/service-catalog.git
-	cd -
-	
+	popd
+
 	# Kubeadm init
 	echo "-- Initializing via kubeadm..."
 	echo "To join nodes to the master, run this on each node: " >> $NEXT_STEPS_FILE
